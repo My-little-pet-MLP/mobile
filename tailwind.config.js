@@ -3,7 +3,16 @@ module.exports = {
     content: ["./src/**/*.{js,jsx,ts,tsx}"],
     presets: [require("nativewind/preset")],
     theme: {
-      extend: {},
+      extend: {
+        colors:{
+          'blue-theme':"#0CCBFF"
+        },
+        fontFamily: {
+          roboto: ['Roboto_400Regular'],
+          crimson: ['CrimsonText_400Regular'],
+          poppins: ['Poppins_400Regular'],
+        },
+      },
     },
     plugins: [],
   }

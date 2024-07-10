@@ -14,6 +14,9 @@
   },
   "dependencies": {
     "@clerk/clerk-expo": "^1.2.5",
+    "@expo-google-fonts/crimson-text": "^0.2.3",
+    "@expo-google-fonts/poppins": "^0.2.3",
+    "@expo-google-fonts/roboto": "^0.2.3",
     "@expo/vector-icons": "^14.0.2",
     "@react-navigation/native": "^6.0.2",
     "axios": "^1.7.2",
