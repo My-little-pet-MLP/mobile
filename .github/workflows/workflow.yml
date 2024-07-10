@@ -1,0 +1,22 @@
+name: Pod Install
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20.11.0' # Versão do Node.js que você está usando
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install pods
+        run: npx pod-install
