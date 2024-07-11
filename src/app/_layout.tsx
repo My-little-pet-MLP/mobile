@@ -24,25 +24,25 @@ function InitialLayout() {
     const {user} = useUser()
     useEffect(() => {
         if (!isLoaded) return
-        if (isSignedIn && user) {
+        if (isSignedIn ) {
 
-            const userinfos: UserProps = {
-                id: user.id,
-                fullname: user.fullName || "",
-                imageUrl: user.imageUrl || "",
-                email: user.emailAddresses[0]?.emailAddress || "",
-                phone: user.phoneNumbers[0]?.phoneNumber || "",
-            };
-             axios.post('http://192.168.3.103:8080/users',userinfos).then(()=>{
-                router.replace("(auth)")
-            })
-             .catch(error => {
-                 console.error("Error posting user data: ",error);
-             });
+            // const userinfos: UserProps = {
+            //     id: user.id,
+            //     fullname: user.fullName || "",
+            //     imageUrl: user.imageUrl || "",
+            //     email: user.emailAddresses[0]?.emailAddress || "",
+            //     phone: user.phoneNumbers[0]?.phoneNumber || "",
+            // };
+            //  axios.post('http://192.168.3.103:8080/users',userinfos).then(()=>{
+            //     router.replace("(auth)")
+            // })
+            //  .catch(error => {
+            //      console.error("Error posting user data: ",error);
+            //  });
         } else {
             router.replace("(public)")
         }
-    }, [isSignedIn,user])
+    }, [isSignedIn])
     return isLoaded ? <Slot /> : (
         <ActivityIndicator style={{ flex: 1, justifyContent: "center", alignItems: "center" }} />
     )
