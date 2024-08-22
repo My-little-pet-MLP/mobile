@@ -6,4 +6,5 @@ export function SplashScreen(){
             <ActivityIndicator color="#fff"/>
         </View>
     )
+    
 }
