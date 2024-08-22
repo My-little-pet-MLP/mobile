@@ -4,7 +4,6 @@ import * as WebBrowser from "expo-web-browser"
 import * as Linking from "expo-linking"
 import { useEffect, useState } from "react"
 import { useOAuth } from "@clerk/clerk-expo"
-import { SafeAreaView } from "react-native-safe-area-context"
 
 WebBrowser.maybeCompleteAuthSession()
 export default function SignIn() {
@@ -37,7 +36,7 @@ export default function SignIn() {
     }, [])
     return (
         <View className="flex-1 bg-blue-theme">
-            <View className="w-full h-2/6">
+            <View className="w-full h-2/6 items-center justify-center">
                 <Image source={require("@/assets/LOGO-MY-LITTLE-PET.png")} className="w-72 h-72 rounded-xl" />
             </View>
             <View className="w-full h-4/6 px-6 bg-white bottom-0 rounded-t-md flex flex-col items-center gap-8 py-8">

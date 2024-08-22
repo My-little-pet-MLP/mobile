@@ -5,7 +5,8 @@ module.exports = {
     theme: {
       extend: {
         colors:{
-          'blue-theme':"#0CCBFF"
+          'blue-theme':"#0CCBFF",
+          'orage-theme':'#FFB800'
         },
         fontFamily: {
           roboto: ['Roboto_400Regular'],
