@@ -9,8 +9,14 @@ export default function LayoutApp(){
                 height:96,
             },
             headerStyle:{
-                height:144
+                height:144,
+                backgroundColor:"#F7AB2A"
             }
+            ,headerTitleStyle:{
+                color:"#fff",
+                fontWeight:700,
+            },
+
         }}>
             <Tabs.Screen name="index" options={{title:"Home" , tabBarIcon:({focused,color,size}) => {
                 if(focused){
@@ -18,19 +24,19 @@ export default function LayoutApp(){
                 }
                 return <Ionicons name="home-outline" color={color} size={size}/>
             } }}/>
-            <Tabs.Screen name="shopping" options={{title:"Shopping", tabBarIcon:({focused,color,size}) =>{
+            <Tabs.Screen name="shopping/index" options={{title:"Shopping", tabBarIcon:({focused,color,size}) =>{
                 if(focused){
                     return <MaterialCommunityIcons name="shopping" color={color} size={size}/>
                 }
                 return <MaterialCommunityIcons name="shopping-outline" color={color} size={size}/>
             }}}/>
-            <Tabs.Screen name="challangers" options={{title:"Challangers" ,tabBarIcon:({focused,color,size}) =>{
+            <Tabs.Screen name="challangers/index" options={{title:"Desafios" ,tabBarIcon:({focused,color,size}) =>{
                 if(focused){
                     return <MaterialCommunityIcons name="gift" color={color} size={size}/>
                 }
                 return <MaterialCommunityIcons name="gift-outline" color={color} size={size}/>
             }}}/>
-            <Tabs.Screen name="profile" options={{title:"Profile" ,tabBarIcon:({focused,color,size}) => {
+            <Tabs.Screen name="profile/index" options={{title:"Perfil" ,tabBarIcon:({focused,color,size}) => {
                 if(focused){
                     return <Ionicons name="person" color={color} size={size}/>
                 }

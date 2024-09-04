@@ -2,7 +2,7 @@ import "../../global.css"
 import { router, Slot } from "expo-router"
 import { useEffect } from "react"
 import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
-
+import { StatusBar } from "react-native";
 import { ClerkProvider, useAuth, useUser } from "@clerk/clerk-expo"
 import { ActivityIndicator } from "react-native"
 import { tockeCache } from "./storage/tokenCache"
@@ -35,8 +35,11 @@ export default function Layout() {
         return <SplashScreen />;
       }
     return (
+        <>
+        <StatusBar barStyle="light-content" />
         <ClerkProvider publishableKey={env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY} tokenCache={tockeCache}>
             <InitialLayout />
         </ClerkProvider>
+        </>
     )
 }
