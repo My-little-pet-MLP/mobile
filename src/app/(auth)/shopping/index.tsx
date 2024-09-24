@@ -12,9 +12,9 @@ export default function ShoppingScreen() {
                     <Image key="2" className="w-full h-[160px] bg-gray-200 rounded-2xl" source={{ uri: "https://jfwzshiyyvxklcuuzueu.supabase.co/storage/v1/object/sign/my-little-pet-banners/banner2.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJteS1saXR0bGUtcGV0LWJhbm5lcnMvYmFubmVyMi5wbmciLCJpYXQiOjE3MjU0OTQzMDgsImV4cCI6MTc1NzAzMDMwOH0.cwzC07Mti86uavuInOnqNk2dtcDIV8ymMcYddAkZpVk&t=2024-09-04T23%3A58%3A43.939Z" }} />
                 </PagerView>
 
-            <HandlerListProducts/>
-            <HandlerListProducts/>
-            <HandlerListProducts/>
+            
+            <HandlerListProducts category_id="e78589e3-91d4-47cc-858d-0fb57e1495f5"/>
+    
             </ScrollView>
         </SafeAreaView>
     )
