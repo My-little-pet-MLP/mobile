@@ -1,30 +1,18 @@
 import { ScrollView, Text, View, ActivityIndicator } from "react-native";
 import { ProductComponent } from "./product-component";
 import { useFetchProductByCategoryId } from "@/libs/react-query/products-queries-and-mutations";
+import { Product } from "@/hooks/products/list-products-by-category";
 
 
 interface HandlerListProductsByCategoryProps {
     category_id: string;
 }
-export interface Product {
-    id: string;
-    title: string;
-    slug: string;
-    imageUrl: string;
-    description: string;
-    priceInCents: number;
-    stock: number;
-    categoryId: string;
-    storeId: string;
-    isActive: boolean;
-    createdAt: string;
-    updatedAt: string;
-}
+
 
 export function HandlerListProducts({ category_id }: HandlerListProductsByCategoryProps) {
-    const { data, isLoading: isLoadingProducts, error: errorProducts } = useFetchProductByCategoryId(category_id ?? "");
+    const { data, isLoading: isLoadingProducts, error: errorProducts } = useFetchProductByCategoryId(category_id ?? "", 1);
 
-    console.log(data);
+  //  console.log(data);
 
     if (isLoadingProducts) {
         return (
@@ -43,7 +31,7 @@ export function HandlerListProducts({ category_id }: HandlerListProductsByCatego
     }
 
     // Verificar se "data" existe e tem produtos
-    if (!data || data.length === 0) {
+    if (!data || data.products.length === 0) {
         return (
             <View className="w-full h-auto mt-6">
                 <Text className="text-gray-500">Nenhum produto encontrado.</Text>
@@ -55,7 +43,7 @@ export function HandlerListProducts({ category_id }: HandlerListProductsByCatego
         <View className="w-full h-auto mt-6">
             <Text className="font-roboto font-bold text-2xl ml-6 mb-6">Mais vendidos</Text>
             <ScrollView horizontal>
-                {data.map((product: Product) => (
+                {data.products.map((product: Product) => (
                     <ProductComponent
                         key={product.id} // Use o id do produto como chave
                         id={product.id}

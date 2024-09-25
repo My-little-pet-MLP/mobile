@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { QUERYKEYS } from "./query-is";
-import { getStoreById } from "@/hooks/stores/get-store-by-id";
+import { getStoreById } from "@/libs/stores/get-store-by-id";
 
 export interface Store {
     id: string;

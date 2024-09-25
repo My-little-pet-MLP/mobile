@@ -12,7 +12,8 @@ export async function getCategoryById(id: string) {
       if (response.status !== 200 || !response.data) {
         throw new Error('Falha ao buscar a categoria');
       }
-  
+
+     
       return response.data;
     } catch (error: any) {
   
