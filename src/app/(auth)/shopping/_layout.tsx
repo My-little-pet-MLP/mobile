@@ -9,10 +9,10 @@ export default function ShoppingLayout() {
     <Stack>
       {/* Tela inicial de Shopping */}
       <Stack.Screen name="index" options={{ headerShown: false }} />
-
+      <Stack.Screen name="list-product-by-category/[categoryId]" options={{headerShown: false}}/>
       {/* Tela de Produto */}
-      <Stack.Screen 
-        name="product/[productId]" 
+      <Stack.Screen
+        name="product/[productId]"
         options={{
           headerShown: true,  // Mostra o header nesta tela
           headerTitle: "Detalhes do produto",  // Título personalizado
@@ -25,10 +25,10 @@ export default function ShoppingLayout() {
           headerRight: () => (
             <TouchableOpacity onPress={() => router.push("/cart")}>
               {/* Ícone de carrinho */}
-              <MaterialCommunityIcons 
-                name="cart" 
-                size={32} 
-                color="white" 
+              <MaterialCommunityIcons
+                name="cart"
+                size={32}
+                color="white"
                 style={{ marginRight: 16 }}
               />
             </TouchableOpacity>
@@ -44,7 +44,7 @@ export default function ShoppingLayout() {
           },
           headerTitleAlign: "center",  // Alinha o título no centro
           headerShadowVisible: false,  // Remove a sombra
-        }} 
+        }}
       />
     </Stack>
   );
