@@ -10,6 +10,8 @@ export default function ShoppingLayout() {
       {/* Tela inicial de Shopping */}
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="list-product-by-category/[categoryId]" options={{headerShown: false}}/>
+      <Stack.Screen name="list-product-by-store/[storeid]" options={{headerShown: false}}/>
+      
       {/* Tela de Produto */}
       <Stack.Screen
         name="product/[productId]"

@@ -1,12 +1,13 @@
-import { useFetchProductById } from "@/libs/react-query/products-queries-and-mutations";
+import { useFetchProductByCategoryId, useFetchProductById, useFetchProductByStoreId } from "@/libs/react-query/products-queries-and-mutations";
 import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
-import { View, Text, Button, ActivityIndicator, Image, TouchableOpacity, ScrollView } from "react-native";
-import Fontisto from '@expo/vector-icons/Fontisto';
+import { View, Text, Button, ActivityIndicator, Image, TouchableOpacity, ScrollView, SafeAreaView, FlatList } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERYKEYS } from "@/libs/react-query/query-is";
-import { useFetchCategoryById } from "@/libs/react-query/categories-queries-and-mutation";
 import { useGetStoreById } from "@/libs/react-query/store-queries-and-mutations";
+import { ProductComponent } from "@/components/product-component";
+import { Product } from "@/hooks/products/list-products-by-category";
 
 export default function StoreDetail() {
     const { storeid } = useLocalSearchParams();
@@ -18,15 +19,16 @@ export default function StoreDetail() {
     const router = useRouter();
     const queryClient = useQueryClient();
 
-    const { data, isLoading: isLoadingProducts, error: errorProducts } = useFetchProductById(storeIdFetch ?? "");
+    const { data, isLoading: isLoadingProducts, error: errorProducts } = useFetchProductByStoreId(storeIdFetch ?? "", 1);
     const MINIMUM_LOADING_TIME = 500;
-    const { data: storeData, isLoading: isLoadingStore, error: errorStore } = useGetStoreById(data?.storeId ?? "")
+    const { data: storeData, isLoading: isLoadingStore, error: errorStore } = useGetStoreById(storeIdFetch ?? "")
+
     useFocusEffect(
         useCallback(() => {
             setIsLoadingScreen(true);
 
             return () => {
-                queryClient.invalidateQueries({ queryKey: [QUERYKEYS.getProductById, QUERYKEYS.getCategoryById, QUERYKEYS.getStoreById] });
+                queryClient.invalidateQueries({ queryKey: [ QUERYKEYS.getStoreById,QUERYKEYS.listProductsByStoreId] });
             };
         }, [])
     );
@@ -46,10 +48,6 @@ export default function StoreDetail() {
             }
         };
     }, [isLoadingProducts]);
-
-    function NavigationCategoryList(categoryId: string) {
-        router.push(`/shopping/list-product-by-category/${categoryId}`);
-    }
 
     if (isLoadingScreen) {
         return (
@@ -76,7 +74,9 @@ export default function StoreDetail() {
     }
 
 
-
+     function HandlerBackScreen() {
+         router.replace("/(auth)/shopping")
+    }
     if (!data) {
         return (
             <View className="flex-1 flex items-center justify-center">
@@ -87,57 +87,48 @@ export default function StoreDetail() {
     }
 
     return (
-        <View className="flex-1 p-6 ">
-            <ScrollView className="flex-1 p-6items-center flex-col gap-4">
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", paddingRight: 16, paddingLeft: 16 }}>
+            <View className="w-full h-auto mt-6">
 
-                <Text className="w-full text-start text-gray-700">
-                    -
-                    <TouchableOpacity onPress={() => NavigationCategoryList(categoryData.id)}>
-                        {/* Encapsulando a string dentro de um componente <Text> */}
-                        <Text>{categoryData.title}</Text>
+                <View className="px-4 flex flex-row gap-2">
+                    <TouchableOpacity onPress={()=>HandlerBackScreen()}>
+                        <View>
+                            <Ionicons name="arrow-back" size={24} />
+                        </View>
                     </TouchableOpacity>
-                    -
-                    <TouchableOpacity>
-                        {/* Encapsulando a string dentro de um componente <Text> */}
-                        <Text>{data.slug}</Text>
-                    </TouchableOpacity>
-                </Text>
-                <Image
-                    source={{ uri: data.imageUrl }}
-                    className="h-[380px] w-[380px] rounded-xl"
+                    <View>
+                        <Text className="font-roboto font-bold text-2xl ml-6 mb-6">{storeData?.title}</Text>
+                    </View>
+                </View>
+                <View className="px-4 mb-16">
+                    <Image className="h-16 w-16 rounded-full" src={storeData?.imageUrl} alt="logo loja" />
+                    <Text>{storeData?.description}</Text>
+                </View>
+                
+                <FlatList
+                    className="mb-24 px-4"
+                    data={data.products}
+                    horizontal={true} // Torna a lista horizontal
+                    keyExtractor={(item: Product) => item.id}
+                    contentContainerStyle={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingBottom: 20, // Para garantir que todos os itens tenham espaço para aparecer
+                    }}
+                    renderItem={({ item }) => (
+                        <ProductComponent
+                            id={item.id}
+                            price={item.priceInCents}
+                            title={item.title}
+                            image_url={item.imageUrl}
+                        />
+                    )}
+                    ListEmptyComponent={() => (
+                        <Text className="text-gray-500">Nenhum produto encontrado.</Text>
+                    )}
+                    showsHorizontalScrollIndicator={false}
                 />
-                <View className="w-full h-fit flex flex-col gap-6">
-                    <Text className="font-bold text-2xl">{data.title}</Text>
-                    <View className="bg-blue-theme rounded-lg min-h-48 p-4">
-                        <Text className="font-bold text-2xl text-white text-start">Descrição</Text>
-                        <Text className="font-normal text-xl text-white text-start">{data.description}</Text>
-                    </View>
-                </View>
-
-                <View className="w-full h-96  flex flex-col gap-6 mt-20 mb-64 bg-blue-theme rounded-lg p-6">
-                    <Image src={storeData?.imageUrl} alt="logo-loja" className="w-16 h-16 rounded-full" />
-                    <View className="w-full h-full flex flex-row justify-between">
-                        <Text className="text-white font-bold text-lg">{storeData?.title}</Text>
-
-                        <TouchableOpacity>
-                            <View><Text className="text-white font-bold text-lg">Visite a loja</Text></View>
-                        </TouchableOpacity>
-                    </View>
-
-
-                </View>
-            </ScrollView>
-            <View className="bg-white w-full flex flex-row justify-between absolute bottom-0 rounded-3xl h-20 mb-24 mx-6">
-                <View className="w-1/2 flex items-center justify-center">
-                    <Text className="text-orange-theme font-bold text-2xl">
-                        R$ {(data.priceInCents / 100).toFixed(2)}
-                    </Text>
-                </View>
-                <TouchableOpacity style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, backgroundColor: "#ffb800", height: "100%", borderRadius: 20, width: "50%", justifyContent: "center" }}>
-                    <Fontisto name="shopping-basket-add" size={24} color="white" />
-                    <Text className="text-2xl text-white font-bold">Comprar</Text>
-                </TouchableOpacity>
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
