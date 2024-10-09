@@ -75,7 +75,7 @@ export default function StoreDetail() {
 
 
      function HandlerBackScreen() {
-         router.replace("/(auth)/shopping")
+         router.replace("/(auth)/shopping/")
     }
     if (!data) {
         return (
