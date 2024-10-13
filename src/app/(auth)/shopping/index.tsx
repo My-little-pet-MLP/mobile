@@ -1,7 +1,7 @@
 import { Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PagerView from 'react-native-pager-view';
-import { HandlerListProducts } from "@/components/handler-list-product";
+import { HandlerRandomListProductsByCategory } from "@/components/handler-random-list-product-by-category";
 
 export default function ShoppingScreen() {
     return (
@@ -13,7 +13,7 @@ export default function ShoppingScreen() {
                 </PagerView>
 
             
-            <HandlerListProducts category_id="e78589e3-91d4-47cc-858d-0fb57e1495f5"/>
+                <HandlerRandomListProductsByCategory />
     
             </ScrollView>
         </SafeAreaView>

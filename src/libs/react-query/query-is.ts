@@ -5,5 +5,7 @@ export enum QUERYKEYS {
     getStoreById = "getStoreById",
     listProductsByCategoryId = "listProductsByCategoryId",
     getProductById = "getProductById",
-    getCategoryById = "getCategoryById"
+    getCategoryById = "getCategoryById",
+    listProductByRandomCategory = "listProductByRandomCategory",
+    listOrdersByCustomer= "listOrdersByCustomer"
 }

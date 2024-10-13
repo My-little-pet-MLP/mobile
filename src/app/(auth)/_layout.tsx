@@ -112,8 +112,10 @@ export default function LayoutApp() {
       />
 
       <Tabs.Screen
+      
         name="cart/index"
         options={{
+          title:"CardShop",
           tabBarButton: () => null, // Esconde o botão da aba
         }}
       />
