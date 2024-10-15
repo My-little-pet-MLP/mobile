@@ -1,26 +1,17 @@
 import { useFetchProductById } from "@/libs/react-query/products-queries-and-mutations";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { View, Text, Button, ActivityIndicator, Image, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, ActivityIndicator, Image, TouchableOpacity, ScrollView } from "react-native";
 import Fontisto from '@expo/vector-icons/Fontisto';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { QUERYKEYS } from "@/libs/react-query/query-is";
-import { useFetchCategoryById } from "@/libs/react-query/categories-queries-and-mutation";
-import { useGetStoreById } from "@/libs/react-query/store-queries-and-mutations";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProductDetail() {
   const { productId } = useLocalSearchParams<{ productId: string }>();
-  const [isLoadingScreen, setIsLoadingScreen] = useState(true);
   const router = useRouter();
-  const queryClient = useQueryClient();
 
 
-  const { data, isLoading: isLoadingProducts, error: errorProducts } = useFetchProductById(productId ?? "");
-
-  const { data: categoryData, isLoading: isLoadingCategory, error: errorCategory } = useFetchCategoryById(data?.categoryId ?? "");
-
-  const { data: storeData, isLoading: isLoadingStore, error: errorStore } = useGetStoreById(data?.storeId ?? "");
+  const { data, isLoading: isLoadingProducts } = useFetchProductById(productId ?? "");
 
   function NavigationCategoryList(categoryId: string) {
     router.push(`/shopping/list-product-by-category/${categoryId}`);
@@ -30,7 +21,7 @@ export default function ProductDetail() {
   }
   return (
     <>
-      {isLoadingCategory || isLoadingProducts || isLoadingStore ? (
+      {isLoadingProducts ? (
         <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size="large" />
         </SafeAreaView>
@@ -39,8 +30,8 @@ export default function ProductDetail() {
           <ScrollView className="flex-1 p-6 flex-col gap-4">
             <Text className="w-full text-start text-gray-700">
               -
-              <TouchableOpacity onPress={() => NavigationCategoryList(categoryData?.id ?? "")}>
-                <Text>{categoryData?.title}</Text>
+              <TouchableOpacity onPress={() => NavigationCategoryList(data?.category?.id ?? "")}>
+                <Text>{data?.category?.slug}</Text>
               </TouchableOpacity>
               -
               <TouchableOpacity>
@@ -60,10 +51,10 @@ export default function ProductDetail() {
             </View>
 
             <View className="w-full h-96 flex flex-col gap-6 mt-20 mb-64 bg-blue-theme rounded-lg p-6">
-              <Image source={{ uri: storeData?.imageUrl }} style={{ width: 64, height: 64, borderRadius: 32 }} />
+              <Image source={{ uri: data?.store?.imageUrl }} style={{ width: 64, height: 64, borderRadius: 32 }} />
               <View className="w-full h-full flex flex-row justify-between">
-                <Text className="text-white font-bold text-lg">{storeData?.title}</Text>
-                <TouchableOpacity onPress={() => NavigationStoreScreen(storeData?.id ?? "")}>
+                <Text className="text-white font-bold text-lg">{data?.store?.title}</Text>
+                <TouchableOpacity onPress={() => NavigationStoreScreen(data?.store?.id ?? "")}>
                   <View><Text className="text-white font-bold text-lg">Visite a loja</Text></View>
                 </TouchableOpacity>
               </View>
