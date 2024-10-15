@@ -1,37 +1,45 @@
+// HandlerRandomListProductsByCategory.tsx
+import React, { useEffect } from "react";
 import { ScrollView, Text, View, ActivityIndicator } from "react-native";
 import { ProductComponent } from "./product-component";
-import { useFetchProductByRandomCategory } from "@/libs/react-query/products-queries-and-mutations";
-import { Product } from "@/hooks/products/list-products-by-category";
-
 
 interface HandlerListProductsByCategoryProps {
-    category_id: string;
+    onLoadingChange?: (isLoading: boolean) => void;
+}
+import { useFetchProductByRandomCategory } from "@/libs/react-query/products-queries-and-mutations";
+
+export function useRandomProductsByCategory() {
+    const { data, isLoading, error } = useFetchProductByRandomCategory(1, 8);
+    
+    return {
+        products: data?.products || [],
+        categoryTitle: data?.category?.title || "Categoria",
+        isLoading,
+        error,
+    };
 }
 
+export function HandlerRandomListProductsByCategory({
+    onLoadingChange,
+}: HandlerListProductsByCategoryProps) {
+    const { products, categoryTitle, isLoading, error } = useRandomProductsByCategory();
 
-export function HandlerRandomListProductsByCategory() {
-    const { data, isLoading: isLoadingProducts, error: errorProducts } = useFetchProductByRandomCategory(1,8);
+    // Notifica o componente pai sobre o estado de carregamento
+    useEffect(() => {
+        if (onLoadingChange) {
+            onLoadingChange(isLoading);
+        }
+    }, [isLoading, onLoadingChange]);
 
-  //  console.log(data);
-
-    if (isLoadingProducts) {
+    if (error) {
         return (
             <View className="w-full h-auto mt-20">
-                <ActivityIndicator size="large" color="#0000ff" />
+                <Text className="text-red-500">Error loading products: {error.message}</Text>
             </View>
         );
     }
 
-    if (errorProducts) {
-        return (
-            <View className="w-full h-auto mt-20">
-                <Text className="text-red-500">Error loading products: {errorProducts.message}</Text>
-            </View>
-        );
-    }
-
-    // Verificar se "data" existe e tem produtos
-    if (!data || data.products.length === 0) {
+    if (products.length === 0) {
         return (
             <View className="w-full h-auto mt-20">
                 <Text className="text-gray-500">Nenhum produto encontrado.</Text>
@@ -41,18 +49,19 @@ export function HandlerRandomListProductsByCategory() {
 
     return (
         <View className="w-full h-auto mt-20">
-            <Text className="font-bold text-2xl ml-6 mb-6 text-orage-theme">{data.category.title}</Text>
+            <Text className="font-bold text-2xl ml-6 mb-6 text-orage-theme">
+                {categoryTitle}
+            </Text>
             <ScrollView horizontal>
-                {data.products.map((product: Product) => (
+                {products.map((product) => (
                     <ProductComponent
-                        key={product.id} // Use o id do produto como chave
+                        key={product.id}
                         id={product.id}
-                        price={product.priceInCents} // Convertendo de centavos para reais, se necessário
+                        price={product.priceInCents}
                         title={product.title}
-                        image_url={product.imageUrl} // Corrigindo o nome da propriedade
+                        image_url={product.imageUrl}
                     />
                 ))}
-               
             </ScrollView>
         </View>
     );

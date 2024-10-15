@@ -1,5 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { RegisterProductInOrderRequest, RegisterProductInOrderResponse, registerProductInOrder } from '@/hooks/product-in-orders/register-product-in-order'; // Importe a função e interfaces corretas
+import { QUERYKEYS } from './query-is';
+import { ListAllProductInOrdersByOrderId } from '@/hooks/product-in-orders/list-all-product-in-orders-by-order-id';
 
 export const useRegisterProductInOrder = () => {
     const queryClient = useQueryClient();
@@ -15,5 +17,13 @@ export const useRegisterProductInOrder = () => {
         onError: (error: any) => {
             console.error("Erro ao registrar produto no pedido:", error.message || error);
         },
+    });
+};
+
+export const useListProductInOrderByOrder = (orderId: string) => {
+    return useQuery({
+        queryKey: [QUERYKEYS.listAllProductInOrdersByOrderId, orderId],
+        queryFn: () => ListAllProductInOrdersByOrderId(orderId),
+        enabled: !!orderId,
     });
 };
