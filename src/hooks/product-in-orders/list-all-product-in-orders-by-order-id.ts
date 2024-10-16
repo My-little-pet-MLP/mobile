@@ -8,7 +8,7 @@ export async function ListAllProductInOrdersByOrderId(
     id: string
 ): Promise<ListAllProductInOrdersByOrderIdResponse> {
     try {
-        console.log(`Iniciando a requisição para o pedido com ID: ${id}`);
+       
 
         // Faz a requisição e armazena a resposta
         const response = await axiosInstance.get<ListAllProductInOrdersByOrderIdResponse>(

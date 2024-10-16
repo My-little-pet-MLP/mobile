@@ -10,9 +10,10 @@ export const useRegisterProductInOrder = () => {
         mutationFn: (request: RegisterProductInOrderRequest) =>
             registerProductInOrder(request), // Usa a função de registro que criamos anteriormente
         onSuccess: (data: RegisterProductInOrderResponse) => {
-            console.log("Produto registrado com sucesso!", data);
+
             // Atualiza o cache ou invalida consultas, conforme necessário
-            queryClient.invalidateQueries({ queryKey: [] });
+            queryClient.invalidateQueries({ queryKey: [QUERYKEYS.listOrdersByCustomer] });
+            queryClient.invalidateQueries({ queryKey: [QUERYKEYS.listAllProductInOrdersByOrderId] });
         },
         onError: (error: any) => {
             console.error("Erro ao registrar produto no pedido:", error.message || error);

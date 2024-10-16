@@ -10,9 +10,6 @@ import { SplashScreen } from "./(public)/splash-screen";
 import { env } from "@/env";
 import {QueryClientProvider} from "@tanstack/react-query"
 import { queryClient } from "@/libs/react-query/react-query";
-
-const PUBLIC_CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY as string
-
 function InitialLayout() {
     const { isSignedIn, isLoaded } = useAuth()
     const {user} = useUser()

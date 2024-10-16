@@ -10,7 +10,7 @@ interface Category {
     slug: string;
 }
 
-interface Store {
+export interface Store {
     id: string;
     imageUrl: string;
     title: string;
@@ -51,7 +51,6 @@ export const useFetchProductByCategoryId = (categoryId: string, page: number) =>
         enabled: !!categoryId,
     });
 }
-
 
 export const useFetchProductById = (id: string) => {
     return useQuery<ProductComplete>({

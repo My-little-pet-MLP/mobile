@@ -24,7 +24,7 @@ export async function registerProductInOrder(
   try {
     // Supondo que estamos utilizando axios para realizar a requisição
     const response = await axiosInstance.post<RegisterProductInOrderResponse>(
-      `/order/registerProduct`,
+      `/product-in-orders/`,
       request
     );
     return response.data;  // Retorna a resposta tipada

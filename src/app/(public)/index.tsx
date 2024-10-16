@@ -23,7 +23,7 @@ export default function SignIn() {
                 setIsLoading(false)
             }
         } catch (error) {
-            console.log(error)
+     
             setIsLoading(false)
         }
     }

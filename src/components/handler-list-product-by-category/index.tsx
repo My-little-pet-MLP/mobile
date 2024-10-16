@@ -1,5 +1,5 @@
 import { ScrollView, Text, View, ActivityIndicator } from "react-native";
-import { ProductComponent } from "./product-component";
+import { ProductComponent } from "../product-component";
 import { useFetchProductByCategoryId } from "@/libs/react-query/products-queries-and-mutations";
 import { Product } from "@/hooks/products/list-products-by-category";
 
@@ -9,10 +9,8 @@ interface HandlerListProductsByCategoryProps {
 }
 
 
-export function HandlerListProducts({ category_id }: HandlerListProductsByCategoryProps) {
+export function HandlerListProductsByCategory({ category_id }: HandlerListProductsByCategoryProps) {
     const { data, isLoading: isLoadingProducts, error: errorProducts } = useFetchProductByCategoryId(category_id ?? "", 1);
-
-  //  console.log(data);
 
     if (isLoadingProducts) {
         return (
