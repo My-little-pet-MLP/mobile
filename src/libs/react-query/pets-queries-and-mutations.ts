@@ -6,7 +6,7 @@ import { RegisterPet } from "@/hooks/pets/register-pet";
 
 export const useListAllPetsByCustomerId = (customer_id: string) => {
     return useQuery({
-        queryKey: [QUERYKEYS.listOrdersByCustomer], // Chave única da query
+        queryKey: [QUERYKEYS.listAllPetsByCustomerId], // Chave única da query
         queryFn: () => ListAllPetsByCustomerId(customer_id), // Função que realiza a requisição
         enabled: !!customer_id, // Habilita a query apenas se customer_id for válido
     });

@@ -12,7 +12,7 @@ export function PetBoxComponent() {
     const { user } = useUser();
     const { data: listAllPets = [], isLoading: isLoadingPetsList, error: PetListError } =
         useListAllPetsByCustomerId(user?.id ?? "");
-
+    console.log(listAllPets)
     const [modalVisible, setModalVisible] = useState(false);
 
     const openModal = () => setModalVisible(true);

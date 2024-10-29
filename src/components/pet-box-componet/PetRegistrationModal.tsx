@@ -1,15 +1,16 @@
 import React, { useState, useRef } from "react";
-import { 
-    View, Text, TextInput, Modal, Button, Image, Alert, TouchableOpacity 
+import {
+    View, Text, TextInput, Modal, Button, Image, Alert, TouchableOpacity
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as ImagePicker from "expo-image-picker";
-import ActionSheet from "react-native-actions-sheet";
+import ActionSheet, { ActionSheetRef } from 'react-native-actions-sheet';
 import { RegisterPetSchema } from "@/libs/schemas/register-pet-schema";
 import { PetCreateRequest } from "../../../@types/pets";
 import { useRegisterPet } from "@/libs/react-query/pets-queries-and-mutations";
 import { useAuth } from "@clerk/clerk-expo";
+import { uploadToSupabase } from "@/libs/supabase/upload-pet";
 
 type PetRegistrationModalProps = {
     visible: boolean;
@@ -20,15 +21,14 @@ export const PetRegistrationModal: React.FC<PetRegistrationModalProps> = ({
     visible,
     onClose,
 }) => {
-    const actionSheetRef = useRef<ActionSheet>(null); // Ref para o ActionSheet
+    const actionSheetRef = useRef<ActionSheetRef>(null);
     const { userId } = useAuth();
     const { mutateAsync: registerPetFunction, isSuccess, isPending } = useRegisterPet();
-    const { control, handleSubmit, formState: { errors }, reset } = useForm<PetCreateRequest>({
+    const { control, handleSubmit, setValue, formState: { errors }, reset, watch } = useForm<PetCreateRequest>({
         resolver: zodResolver(RegisterPetSchema),
     });
 
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [petSize, setPetSize] = useState<string | null>(null); // Estado para o tamanho do pet
 
     const handleSelectImage = async (fromCamera = false) => {
         const permissionResult = fromCamera
@@ -41,15 +41,33 @@ export const PetRegistrationModal: React.FC<PetRegistrationModalProps> = ({
         }
 
         const result = fromCamera
-            ? await ImagePicker.launchCameraAsync({ quality: 0.5, mediaTypes: ImagePicker.MediaTypeOptions.Images })
-            : await ImagePicker.launchImageLibraryAsync({ quality: 0.5, mediaTypes: ImagePicker.MediaTypeOptions.Images });
+            ? await ImagePicker.launchCameraAsync({ quality: 1, mediaTypes: ImagePicker.MediaTypeOptions.Images })
+            : await ImagePicker.launchImageLibraryAsync({ quality: 1, mediaTypes: ImagePicker.MediaTypeOptions.Images });
 
         if (!result.canceled) {
+            console.log("URI da imagem:", result.assets[0].uri);
             setSelectedImage(result.assets[0].uri);
         }
     };
 
+    const handleSizeSelection = (size: "mini" | "pequeno" | "medio" | "grande" | "gigante") => {
+        setValue("size", size);
+        actionSheetRef.current?.hide();
+    };
+
+    const size = watch("size");
+
+    async function uriToBlob(uri: string): Promise<Blob> {
+        const response = await fetch(uri);
+        if (!response.ok) {
+            throw new Error(`Erro ao buscar imagem: ${response.statusText}`);
+        }
+        return await response.blob();
+    }
+
     async function RegisterPetHandler(data: PetCreateRequest) {
+        console.log("Tentando salvar o pet...");
+
         if (!userId) {
             console.error("ID não disponível");
             return;
@@ -60,23 +78,33 @@ export const PetRegistrationModal: React.FC<PetRegistrationModalProps> = ({
             return;
         }
 
-        if (!petSize) {
-            Alert.alert("Erro", "Por favor, selecione o tamanho do pet.");
-            return;
-        }
+        try {
+            const blob = await uriToBlob(selectedImage);
+            const fileName = `${Date.now()}_pet_image.jpg`;
 
-        await registerPetFunction({
-            ...data,
-            customerId: userId,
-            imageUrl: selectedImage,
-            size: petSize,
-        });
+            const { publicUrl, error } = await uploadToSupabase(blob, "my-little-pet-pets", fileName);
 
-        if (isSuccess) {
-            reset();
-            setSelectedImage(null);
-            setPetSize(null);
-            onClose();
+            if (error) {
+                throw error;
+            }
+
+            console.log("URL pública:", publicUrl);
+
+            await registerPetFunction({
+                ...data,
+                customerId: userId,
+                imageUrl: publicUrl || "",
+            });
+
+            if (isSuccess) {
+                console.log("Pet salvo com sucesso!");
+                reset();
+                setSelectedImage(null);
+                onClose();
+            }
+        } catch (error) {
+            console.error("Erro ao salvar pet:", error);
+            Alert.alert("Erro", "Não foi possível salvar o pet.");
         }
     }
 
@@ -86,7 +114,6 @@ export const PetRegistrationModal: React.FC<PetRegistrationModalProps> = ({
                 <View className="w-full max-w-md bg-white p-6 rounded-xl shadow-lg">
                     <Text className="text-xl font-bold text-center mb-4">Cadastrar Novo Pet</Text>
 
-                    {/* Nome do Pet */}
                     <Controller
                         control={control}
                         name="name"
@@ -101,7 +128,6 @@ export const PetRegistrationModal: React.FC<PetRegistrationModalProps> = ({
                     />
                     {errors.name && <Text className="text-red-500">Nome é obrigatório</Text>}
 
-                    {/* Raça do Pet */}
                     <Controller
                         control={control}
                         name="breed"
@@ -116,7 +142,6 @@ export const PetRegistrationModal: React.FC<PetRegistrationModalProps> = ({
                     />
                     {errors.breed && <Text className="text-red-500">Raça é obrigatória</Text>}
 
-                    {/* Idade do Pet */}
                     <Controller
                         control={control}
                         name="age"
@@ -132,30 +157,25 @@ export const PetRegistrationModal: React.FC<PetRegistrationModalProps> = ({
                     />
                     {errors.age && <Text className="text-red-500">Idade é obrigatória</Text>}
 
-                    {/* Seleção de Tamanho */}
                     <TouchableOpacity
                         className="border p-3 rounded-md mb-3"
                         onPress={() => actionSheetRef.current?.show()}
                     >
-                        <Text>{petSize || "Selecione o tamanho"}</Text>
+                        <Text>{size || "Selecione o tamanho"}</Text>
                     </TouchableOpacity>
 
                     <ActionSheet ref={actionSheetRef}>
-                        {["Mini", "Pequeno", "Médio", "Grande", "Gigante"].map((size) => (
+                        {["mini", "pequeno", "medio", "grande", "gigante"].map((size) => (
                             <TouchableOpacity
                                 key={size}
                                 className="p-4 border-b"
-                                onPress={() => {
-                                    setPetSize(size.toLowerCase());
-                                    actionSheetRef.current?.hide();
-                                }}
+                                onPress={() => handleSizeSelection(size as any)}
                             >
-                                <Text>{size}</Text>
+                                <Text>{size.charAt(0).toUpperCase() + size.slice(1)}</Text>
                             </TouchableOpacity>
                         ))}
                     </ActionSheet>
 
-                    {/* Seleção de Imagem */}
                     <View className="flex-row justify-between my-4">
                         <Button title="Galeria" onPress={() => handleSelectImage(false)} />
                         <Button title="Câmera" onPress={() => handleSelectImage(true)} />
@@ -169,7 +189,6 @@ export const PetRegistrationModal: React.FC<PetRegistrationModalProps> = ({
                         />
                     )}
 
-                    {/* Botões de Ação */}
                     <View className="flex-row justify-between">
                         <Button title="Fechar" onPress={onClose} color="red" />
                         <Button

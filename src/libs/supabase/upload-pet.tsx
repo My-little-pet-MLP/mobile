@@ -1,80 +1,76 @@
 import { createClient } from "@supabase/supabase-js";
 
-export const supabaseUrl = process.env.SUPABASE_URL!;
-export const supabaseAnonKey = process.env.SUPABASE_ANON_KEY!;
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabase = createClient(
+  'https://jfwzshiyyvxklcuuzueu.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impmd3pzaGl5eXZ4a2xjdXV6dWV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjU0ODgxNDQsImV4cCI6MjA0MTA2NDE0NH0.j-6tIBTak0I75Tci53i1aGg8iySxIlsiTY8bEQ-MlCI'
+);
 
 interface uploadResponse {
-    publicUrl: string | null;
-    error: Error | null;
+  publicUrl: string | null;
+  error: Error | null;
 }
-// Lista de extensões de imagem permitidas
+
 const validImageExtensions = ['.png', '.jpg', '.jpeg', '.svg'];
 
-// Função para verificar a extensão do arquivo
 function isImageFile(fileName: string): boolean {
-    const extension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
-    return validImageExtensions.includes(extension);
+  const extension = fileName.slice(fileName.lastIndexOf('.')).toLowerCase();
+  return validImageExtensions.includes(extension);
 }
+
 function sanitizeFileName(fileName: string): string {
-    return fileName
-        .toLowerCase() // Converte para minúsculas
-        .replace(/[^\w.]+/g, '_'); // Substitui caracteres especiais por underscores
-}
-function checkImageDimensions(file: File, expectedWidth: number, expectedHeight: number): Promise<void> {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-            img.onload = function () {
-                if (img.width === expectedWidth && img.height === expectedHeight) {
-                    resolve();
-                } else {
-                    reject(new Error(`A imagem deve ter as dimensões ${expectedWidth}x${expectedHeight}.`));
-                }
-            };
-            img.onerror = reject;
-            if (e.target) {
-                img.src = e.target.result as string;
-            }
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
+  return fileName.toLowerCase().replace(/[^\w.]+/g, '_');
 }
 
-export async function uploadPetImage(file: File, folder: string): Promise<uploadResponse> {
-    if (!isImageFile(file.name)) {
-        return { publicUrl: null, error: new Error("O arquivo deve ser uma imagem válida.") };
+async function uriToBlob(uri: string): Promise<Blob> {
+  try {
+    const response = await fetch(uri);
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar a imagem: ${response.statusText}`);
     }
 
-    const fileName = `${Date.now()}_${file.name}`;
-    return uploadToSupabase(file, folder, fileName);
-}
-async function uploadToSupabase(file: File, folder: string, fileName: string): Promise<uploadResponse> {
-    const sanitizedFileName = sanitizeFileName(fileName);
+    const blob = await response.blob();
+    if (blob.size === 0) {
+      throw new Error("O Blob está vazio.");
+    }
 
+    console.log("Blob criado com sucesso:", blob);
+    return blob;
+  } catch (error) {
+    console.error("Erro ao converter URI para Blob:", error);
+    throw error;
+  }
+}
+
+export async function uploadPetImage(uri: string, folder: string): Promise<uploadResponse> {
+  const blob = await uriToBlob(uri);
+  const fileName = `${Date.now()}_${sanitizeFileName('pet_image.jpg')}`;
+  return uploadToSupabase(blob, folder, fileName);
+}
+
+export async function uploadToSupabase(blob: Blob, folder: string, fileName: string): Promise<uploadResponse> {
+    console.log("Iniciando upload para o Supabase...");
+  
     const { data, error } = await supabase.storage
-        .from(folder)
-        .upload(`${folder}/${sanitizedFileName}`, file, {
-            cacheControl: '3600',
-            upsert: false
-        });
-
+      .from(folder)
+      .upload(`${folder}/${fileName}`, blob, {
+        contentType: blob.type, // Garantir que o tipo seja definido corretamente.
+        cacheControl: '3600',
+        upsert: false,
+      });
+  
+    console.log("Resposta do Supabase:", { data, error });
+  
     if (error) {
-        console.error('Erro ao fazer upload da imagem:', error);
-        return { publicUrl: null, error: new Error("Erro ao fazer upload da imagem.") };
+      console.error('Erro ao fazer upload da imagem:', error);
+      return { publicUrl: null, error: new Error("Erro ao fazer upload da imagem.") };
     }
-
-    const responseUrl = supabase.storage
-        .from(folder)
-        .getPublicUrl(`${folder}/${sanitizedFileName}`);
-
-    if (!responseUrl.data.publicUrl) {
-        console.error('Erro ao obter URL pública:');
-        return { publicUrl: null, error: new Error("Erro ao obter URL pública.") };
-    }
-
-    return { publicUrl: responseUrl.data.publicUrl, error: null };
-}
+  
+    const { data: publicData } = supabase.storage
+      .from(folder)
+      .getPublicUrl(`${folder}/${fileName}`);
+  
+    console.log("URL pública gerada:", publicData?.publicUrl);
+  
+    return { publicUrl: publicData?.publicUrl || null, error: null };
+  }
+  
