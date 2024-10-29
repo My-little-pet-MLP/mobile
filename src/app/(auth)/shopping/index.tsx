@@ -1,22 +1,14 @@
-// ShoppingScreen.tsx
-import React, { useState } from "react";
-import { Image, ScrollView, ActivityIndicator, View, StyleSheet } from "react-native";
+import React from "react";
+import { Image, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PagerView from "react-native-pager-view";
 import { HandlerRandomListProductsByCategory } from "@/components/handler-random-list-product-by-category";
 
 export default function ShoppingScreen() {
-    const [isLoading, setIsLoading] = useState(false); // Estado para monitorar o carregamento
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", paddingRight: 16, paddingLeft: 16 }}>
             <View style={{ flex: 1 }}>
-                {isLoading && (
-                    <View style={styles.loadingOverlay}>
-                        <ActivityIndicator size="large" color="#0000ff" />
-                    </View>
-                )}
-
                 <ScrollView style={{ flex: 1 }}>
                     <PagerView style={{ width: "100%", height: 160, borderRadius: 16 }} initialPage={0}>
                         <Image
@@ -31,19 +23,9 @@ export default function ShoppingScreen() {
                         />
                     </PagerView>
 
-                    <HandlerRandomListProductsByCategory onLoadingChange={setIsLoading} />
+                    <HandlerRandomListProductsByCategory />
                 </ScrollView>
             </View>
         </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    loadingOverlay: {
-        ...StyleSheet.absoluteFillObject, // Preenche toda a tela
-        backgroundColor: "rgba(0, 0, 0, 0.5)", // Fundo semi-transparente
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1, // Sobrepõe outros elementos
-    },
-});

@@ -9,9 +9,7 @@ module.exports = {
           'orage-theme':'#FFB800'
         },
         fontFamily: {
-          roboto: ['Roboto_400Regular'],
-          crimson: ['CrimsonText_400Regular'],
-          poppins: ['Poppins_400Regular'],
+          roboto: ['Roboto_400Regular','Roboto_700Bold']
         },
       },
     },

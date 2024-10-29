@@ -7,6 +7,8 @@ import { useFetchProductByRandomCategory } from "@/libs/react-query/products-que
 export function HandlerRandomListProductsByCategory() {
     const { data: products, isLoading, error } = useFetchProductByRandomCategory(1, 8);
 
+    const productList = products?.products ?? []; // Garantir valor padrão como array vazio
+
     return (
         <View className="w-full h-auto mt-20">
             {isLoading ? (
@@ -20,18 +22,22 @@ export function HandlerRandomListProductsByCategory() {
             ) : (
                 <>
                     <Text className="font-bold text-2xl ml-6 mb-6 text-orange-theme">
-                        {products?.category.title}
+                        {products?.category?.title ?? "Categoria desconhecida"}
                     </Text>
                     <ScrollView horizontal className="flex-row px-4">
-                        {products?.products.map((product) => (
-                            <ProductComponent
-                                key={product.id}
-                                id={product.id}
-                                price={product.priceInCents}
-                                title={product.title}
-                                image_url={product.imageUrl}
-                            />
-                        ))}
+                        {productList.length > 0 ? (
+                            productList.map((product) => (
+                                <ProductComponent
+                                    key={product.id}
+                                    id={product.id}
+                                    price={product.priceInCents}
+                                    title={product.title}
+                                    image_url={product.imageUrl}
+                                />
+                            ))
+                        ) : (
+                            <Text className="text-gray-500">Nenhum produto encontrado.</Text>
+                        )}
                     </ScrollView>
                 </>
             )}

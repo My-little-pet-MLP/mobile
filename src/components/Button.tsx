@@ -8,15 +8,15 @@ interface ButtonProps extends TouchableOpacityProps {
 }
 export function Button({ title, isLoading = false, icon, ...rest }: ButtonProps) {
     return (
-        <TouchableOpacity disabled= {isLoading} activeOpacity={0.8} {...rest} style={styles.container}>
-            {isLoading ? 
-        (<ActivityIndicator color="white" />) :
-         (<><Ionicons name={icon} style={styles.icon}/>
-            <Text style={styles.text}>
-                {title}
-            </Text>
-        </>
-        )}
+        <TouchableOpacity disabled={isLoading} activeOpacity={0.8} {...rest} style={styles.container}>
+            {isLoading ?
+                (<ActivityIndicator color="white" />) :
+                (<><Ionicons name={icon} style={styles.icon} />
+                    <Text style={styles.text}>
+                        {title}
+                    </Text>
+                </>
+                )}
 
 
         </TouchableOpacity>
@@ -24,22 +24,22 @@ export function Button({ title, isLoading = false, icon, ...rest }: ButtonProps)
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         width: "100%",
-        flexDirection:"row",
-        alignItems:"center",
-        justifyContent:"center",
-        gap:7,
-        backgroundColor:"#000",
-        padding:22,
-        borderRadius:16
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 7,
+        backgroundColor: "#000",
+        padding: 22,
+        borderRadius: 16
     },
-    icon:{
-        color:"#fff",
-        fontSize:20
+    icon: {
+        color: "#fff",
+        fontSize: 20
     },
-    text:{
-        color:"#fff",
-        fontSize:16,
+    text: {
+        color: "#fff",
+        fontSize: 16,
     },
 })
