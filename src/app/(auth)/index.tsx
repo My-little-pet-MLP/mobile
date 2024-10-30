@@ -11,6 +11,7 @@ import PagerView from "react-native-pager-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HandlerRandomListProductsByCategory } from "@/components/handler-random-list-product-by-category";
 import { MissionBoxHome } from "@/components/mission-box-home";
+import { PetBoxComponent } from "@/components/pet-box-componet";
 
 export default function HomeScreen() {
     const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +60,7 @@ export default function HomeScreen() {
 
                             <HandlerRandomListProductsByCategory/>
                             <MissionBoxHome />
-                          
+                            <PetBoxComponent />
                         </ScrollView>
                     </View >
                 </SafeAreaView >
@@ -73,9 +74,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
         paddingHorizontal: 16,
+       
+
     },
     container: {
         flex: 1,
+       
     },
     loadingOverlay: {
         ...StyleSheet.absoluteFillObject,
@@ -86,6 +90,7 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         flex: 1,
+        
     },
     pagerView: {
         width: "100%",

@@ -20,7 +20,7 @@ export function PetBoxComponent() {
     return (
         <>
             {isLoadingPetsList ? (
-                <View className="bg-blue-theme rounded-2xl px-4 py-4 flex flex-col gap-6 min-h-64 mb-6">
+                <View className="bg-blue-theme rounded-2xl px-4 py-4 flex flex-col gap-6 min-h-64 mb-6 mt-12">
                     <Text className="font-roboto font-bold text-white text-2xl">Carregando Pets...</Text>
                     <View>
                         {Array.from({ length: 3 }).map((_, index) => (
@@ -33,7 +33,7 @@ export function PetBoxComponent() {
                     <Text className="text-red-500">Erro ao carregar a lista de pets.</Text>
                 </View>
             ) : listAllPets.length === 0 ? (
-                <View className="bg-blue-theme rounded-2xl px-4 py-4 flex flex-col gap-6 min-h-64 mb-6">
+                <View className="bg-blue-theme rounded-2xl px-4 py-4 flex flex-col gap-6 min-h-64 mb-6 mt-12">
                     <LabelBox openModal={openModal} />
                     <View className="flex items-center justify-center flex-1">
                         <Text className="font-roboto font-bold text-white">
@@ -42,7 +42,7 @@ export function PetBoxComponent() {
                     </View>
                 </View>
             ) : (
-                <View className="bg-blue-theme rounded-2xl px-4 py-4 flex flex-col gap-6 min-h-64 mb-6">
+                <View className="bg-blue-theme rounded-2xl px-4 py-4 flex flex-col gap-6 min-h-64 mb-6 mt-12">
                     <LabelBox openModal={openModal} />
                     <View>
                         {listAllPets.map((pet) => (
