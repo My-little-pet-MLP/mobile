@@ -43,7 +43,6 @@ export async function listProductsByCategoryId(category_id: string,page: number,
 
         return response.data;
     } catch (error: any) {
-        console.log('Erro ao listar produtos:', error.message || error);
         throw new Error(error.response?.data?.message || 'Erro inesperado ao listar produtos.');
     }
 }

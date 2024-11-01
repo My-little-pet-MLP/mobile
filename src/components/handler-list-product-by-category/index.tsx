@@ -1,5 +1,5 @@
 import { ScrollView, Text, View, ActivityIndicator } from "react-native";
-import { ProductComponent } from "./product-component";
+import { ProductComponent } from "../product-component";
 import { useFetchProductByCategoryId } from "@/libs/react-query/products-queries-and-mutations";
 import { Product } from "@/hooks/products/list-products-by-category";
 
@@ -9,10 +9,8 @@ interface HandlerListProductsByCategoryProps {
 }
 
 
-export function HandlerListProducts({ category_id }: HandlerListProductsByCategoryProps) {
+export function HandlerListProductsByCategory({ category_id }: HandlerListProductsByCategoryProps) {
     const { data, isLoading: isLoadingProducts, error: errorProducts } = useFetchProductByCategoryId(category_id ?? "", 1);
-
-  //  console.log(data);
 
     if (isLoadingProducts) {
         return (
@@ -45,14 +43,14 @@ export function HandlerListProducts({ category_id }: HandlerListProductsByCatego
             <ScrollView horizontal>
                 {data.products.map((product: Product) => (
                     <ProductComponent
-                        key={product.id} // Use o id do produto como chave
+                        key={product.id} 
                         id={product.id}
-                        price={product.priceInCents} // Convertendo de centavos para reais, se necessário
+                        price={product.priceInCents} 
                         title={product.title}
-                        image_url={product.imageUrl} // Corrigindo o nome da propriedade
+                        image_url={product.imageUrl} 
                     />
                 ))}
-               
+
             </ScrollView>
         </View>
     );

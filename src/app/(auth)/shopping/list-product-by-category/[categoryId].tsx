@@ -48,12 +48,12 @@ export default function ListProductByCategory() {
         <FlatList
           className="mb-24"
           data={data.products}
-          numColumns={2} // Definido para duas colunas
+          numColumns={2}
           keyExtractor={(item: Product) => item.id}
           contentContainerStyle={{
             justifyContent: 'center',
             alignItems: 'center',
-          }} // Centralizando os itens
+          }}
           renderItem={({ item }) => (
             <ProductComponent
               id={item.id}
