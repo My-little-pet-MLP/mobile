@@ -42,10 +42,10 @@ export default function SignIn() {
             <View className="w-full h-4/6 px-6 bg-white bottom-0 rounded-t-md flex flex-col items-center gap-8 py-8">
 
                 <View className="w-full flex flex-col gap-1 h-1/3">
-                    <Text className="font-crimson font-bold text-3xl text-start w-full">
+                    <Text className=" font-bold text-3xl text-start w-full">
                         Bem vindo ao My Little Pet
                     </Text>
-                    <Text className="w-full font-crimson font-normal text-lg text-start">
+                    <Text className="w-full  font-normal text-lg text-start">
                         Complete missões com seu companheiro e ganhe recompensa
                     </Text>
                 </View>
