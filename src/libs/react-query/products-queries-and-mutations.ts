@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { QueryFunctionContext, useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { QUERYKEYS } from "./query-is";
 import { listProductsByStoreId } from "@/hooks/products/list-products-by-store";
 import { listProductsByCategoryId, Product, ProductsData, } from "@/hooks/products/list-products-by-category";
@@ -60,6 +60,22 @@ export const useFetchProductById = (id: string) => {
     });
 };
 
+export const useInfiniteFetchProductByCategoryId = (categoryId: string) => {
+    return useInfiniteQuery<ProductsData, Error, ProductsData, [string, string], number>({
+      queryKey: [QUERYKEYS.listProductsByCategoryId, categoryId],
+      queryFn: ({ pageParam = 1 }: QueryFunctionContext<[string, string], number>) =>
+        listProductsByCategoryId(categoryId, pageParam),
+      getNextPageParam: (lastPage) => {
+        if (lastPage.currentPage < lastPage.totalPages) {
+          return lastPage.currentPage + 1;
+        } else {
+          return undefined;
+        }
+      },
+      initialPageParam: 1,
+      enabled: !!categoryId,
+    });
+  };
 
 export const useFetchProductByRandomCategory = (page: number, size: number) => {
     return useQuery<ProductsByRandomCategoryResponse>({

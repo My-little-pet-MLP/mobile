@@ -25,7 +25,7 @@ export function ProductComponent({
     const textColor = variant === "white" ? "#FFFFFF" : "#F97316"; // Cor do texto com base na variante
 
     return (
-        <TouchableOpacity onPress={() => NavigationProductId(id)} style={{ marginRight: 16 }}>
+        <TouchableOpacity onPress={() => NavigationProductId(id)} style={{ marginRight: 16 ,marginBottom:16}}>
             <View
                 style={{
                     borderColor: "#E5E7EB", // Cor cinza clara
