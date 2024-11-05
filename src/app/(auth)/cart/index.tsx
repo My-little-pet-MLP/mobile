@@ -56,7 +56,7 @@ export default function CartShopping() {
             <ScrollView>
                 {orders.orders.map((order) => (
                     <View key={order.id} className="mb-4">
-                        <StoreInfo storeId={order.storeId} orderId={order.id} fullPrice={order.fullPriceOrderInCents} />
+                        <StoreInfo storeId={order.storeId} orderId={order.id} />
                     </View>
                 ))}
             </ScrollView>

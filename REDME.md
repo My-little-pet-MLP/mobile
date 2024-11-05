@@ -4,8 +4,10 @@
 - [ ] excluir o pet;
 - [ ] adicionar o cupom a compra;
 - [ ] listar os cupons do usuario;
+
 - [ ] tirar foto na missão;
 - [ ] rodar timer nas missão de tempo;
+
 - [ ] cadastrar cupom na loja;
 - [ ] editar produto do carrinho;
 - [ ] editar perfil do usuario;
