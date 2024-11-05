@@ -9,5 +9,6 @@ export enum QUERYKEYS {
     listProductByRandomCategory = "listProductByRandomCategory",
     listOrdersByCustomer= "listOrdersByCustomer",
     listAllProductInOrdersByOrderId="listAllProductInOrdersByOrderId",
-    listAllPetsByCustomerId = "listAllPetsByCustomerId"
+    listAllPetsByCustomerId = "listAllPetsByCustomerId",
+    listMissions= "listMissions"
 }
