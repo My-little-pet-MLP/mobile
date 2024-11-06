@@ -17,3 +17,11 @@ export interface PetModel{
     customerId: string;
     isActive: boolean;
 }
+export interface PetModelUpdateProps{
+    id: string;
+    name: string;
+    breed: string;
+    age: number;
+    imageUrl: string;
+    size: "mini" | "pequeno" | "medio" | "grande" | "gigante";
+}

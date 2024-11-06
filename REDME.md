@@ -1,7 +1,7 @@
 # requisitos que faltam dia 05/11/2024
 
 # requisitos prioritarios;
-- [ ] excluir o pet;
+- [x] excluir o pet;
 - [ ] adicionar o cupom a compra;
 - [ ] listar os cupons do usuario;
 
