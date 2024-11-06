@@ -11,8 +11,6 @@ import { Product } from "@/hooks/products/list-products-by-category";
 
 export default function StoreDetail() {
     const { storeid } = useLocalSearchParams();
-    const [isLoadingScreen, setIsLoadingScreen] = useState(true);
-
     // Garantir que seja sempre uma string
     const storeIdFetch = Array.isArray(storeid) ? storeid[0] : storeid;
 
@@ -20,38 +18,11 @@ export default function StoreDetail() {
     const queryClient = useQueryClient();
 
     const { data, isLoading: isLoadingProducts, error: errorProducts } = useFetchProductByStoreId(storeIdFetch ?? "", 1);
-    const MINIMUM_LOADING_TIME = 500;
+
     const { data: storeData, isLoading: isLoadingStore, error: errorStore } = useGetStoreById(storeIdFetch ?? "")
-
-    useFocusEffect(
-        useCallback(() => {
-            setIsLoadingScreen(true);
-
-            return () => {
-                queryClient.invalidateQueries({ queryKey: [ QUERYKEYS.getStoreById,QUERYKEYS.listProductsByStoreId] });
-            };
-        }, [])
-    );
-
-    useEffect(() => {
-        let timeoutId: NodeJS.Timeout | number;
-
-        if (!isLoadingProducts || isLoadingStore) {
-            timeoutId = setTimeout(() => {
-                setIsLoadingScreen(false);
-            }, MINIMUM_LOADING_TIME);
-        }
-
-        return () => {
-            if (timeoutId) {
-                clearTimeout(timeoutId as number);
-            }
-        };
-    }, [isLoadingProducts]);
-
-    if (isLoadingScreen) {
+    if (isLoadingProducts || isLoadingStore) {
         return (
-            <View className="flex-1 items-center justify-center flex">
+            <View className="w-full h-auto mt-6">
                 <ActivityIndicator size="large" color="#0000ff" />
             </View>
         );
@@ -74,8 +45,8 @@ export default function StoreDetail() {
     }
 
 
-     function HandlerBackScreen() {
-         router.replace("/(auth)/shopping/")
+    function HandlerBackScreen() {
+        router.replace("/(auth)/shopping/")
     }
     if (!data) {
         return (
@@ -91,7 +62,7 @@ export default function StoreDetail() {
             <View className="w-full h-auto mt-6">
 
                 <View className="px-4 flex flex-row gap-2">
-                    <TouchableOpacity onPress={()=>HandlerBackScreen()}>
+                    <TouchableOpacity onPress={() => HandlerBackScreen()}>
                         <View>
                             <Ionicons name="arrow-back" size={24} />
                         </View>
@@ -104,16 +75,15 @@ export default function StoreDetail() {
                     <Image className="h-16 w-16 rounded-full" src={storeData?.imageUrl} alt="logo loja" />
                     <Text>{storeData?.description}</Text>
                 </View>
-                
+
                 <FlatList
-                    className="mb-24 px-4"
+                    className="mb-24"
                     data={data.products}
-                    horizontal={true} // Torna a lista horizontal
+                    numColumns={2}
                     keyExtractor={(item: Product) => item.id}
                     contentContainerStyle={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        paddingBottom: 20, // Para garantir que todos os itens tenham espaço para aparecer
                     }}
                     renderItem={({ item }) => (
                         <ProductComponent
@@ -121,12 +91,12 @@ export default function StoreDetail() {
                             price={item.priceInCents}
                             title={item.title}
                             image_url={item.imageUrl}
+
                         />
                     )}
                     ListEmptyComponent={() => (
                         <Text className="text-gray-500">Nenhum produto encontrado.</Text>
                     )}
-                    showsHorizontalScrollIndicator={false}
                 />
             </View>
         </SafeAreaView>
