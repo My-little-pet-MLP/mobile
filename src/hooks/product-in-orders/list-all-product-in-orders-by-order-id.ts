@@ -1,23 +1,15 @@
 import { axiosInstance } from "@/libs/axios";
 import { ProductInOrderList } from "../../../@types/product-in-orders";
 
-// Ajuste da interface para refletir a resposta correta
-export type ListAllProductInOrdersByOrderIdResponse = ProductInOrderList[];
 
 export async function ListAllProductInOrdersByOrderId(
     id: string
-): Promise<ListAllProductInOrdersByOrderIdResponse> {
+): Promise<ProductInOrderList[]> {
     try {
-       
-
         // Faz a requisição e armazena a resposta
-        const response = await axiosInstance.get<ListAllProductInOrdersByOrderIdResponse>(
+        const response = await axiosInstance.get<ProductInOrderList[]>(
             `/product-in-orders/listallbyorder/${id}`
         );
-
-        console.log('Resposta completa da requisição:', response);
-        console.log('Dados retornados:', response.data);
-
         // Retorna o array diretamente
         return response.data;
     } catch (error: any) {

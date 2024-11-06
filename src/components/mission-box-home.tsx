@@ -17,7 +17,7 @@ export function MissionBoxHome() {
         router.push("/(auth)/challangers");
     }
     function HandlerCuponsScreen() {
-        router.push("/shopping/list-cupons");
+        router.push(`/(auth)/cart`);
     }
 
     useEffect(() => {
@@ -80,7 +80,7 @@ export function MissionBoxHome() {
                                             backgroundColor: "#0CCBFF",
                                             borderRadius: 8,
                                         }}>
-                                            <Text className="text-white font-bold text-xl text-center">Veja meus cupons</Text>
+                                            <Text className="text-white font-bold text-xl text-center">Veja no seu carrinho de compra</Text>
                                         </TouchableOpacity>
                                     </>
                                 ) : (

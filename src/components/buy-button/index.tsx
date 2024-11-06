@@ -10,6 +10,7 @@ import {
     StyleSheet 
 } from "react-native";
 import { useState } from "react";
+import { router } from "expo-router";
 
 interface BuyButtonProps {
     priceInCents: number;
@@ -35,6 +36,7 @@ export function BuyButton({ priceInCents, product_id }: BuyButtonProps) {
             product_id,
             quantity,
         });
+        router.push("/(auth)/cart")
     }
 
     return (

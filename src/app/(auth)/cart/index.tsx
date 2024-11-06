@@ -10,7 +10,7 @@ export default function CartShopping() {
     const { userId } = useAuth();
     const { data: orders, error: listOrderError, isLoading: isLoadingListOrders } =
         useListOrdersByCustomer(userId ?? "", 1, 8);
-
+    console.log(orders?.orders[0].id)
     // Tratamento de erro para pedidos
     if (axios.isAxiosError(listOrderError)) {
         const statusCode = listOrderError.response?.status;
@@ -56,7 +56,7 @@ export default function CartShopping() {
             <ScrollView>
                 {orders.orders.map((order) => (
                     <View key={order.id} className="mb-4">
-                        <StoreInfo storeId={order.storeId} orderId={order.id} />
+                        <StoreInfo storeId={order.storeId} order={order} />
                     </View>
                 ))}
             </ScrollView>

@@ -11,7 +11,7 @@ export default function ShoppingLayout() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="list-product-by-category/[categoryId]" options={{ headerShown: false }} />
       <Stack.Screen name="list-product-by-store/[storeid]" options={{ headerShown: false }} />
-      <Stack.Screen name="list-cupons/index" options={{ headerShown: false }} />
+      <Stack.Screen name="list-cupons/[store_id]" options={{ headerShown: false }} />
       {/* Tela de Produto */}
       <Stack.Screen
         name="product/[productId]"
