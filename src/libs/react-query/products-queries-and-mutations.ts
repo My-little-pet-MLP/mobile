@@ -5,81 +5,98 @@ import { listProductsByCategoryId, Product, ProductsData, } from "@/hooks/produc
 import { getProductById } from "@/hooks/products/get-product-by-id";
 import { ListProductsByRandomCategory, ProductsByRandomCategoryResponse } from "@/hooks/products/list-product-by-random-category";
 interface Category {
-    id: string;
-    title: string;
-    slug: string;
+  id: string;
+  title: string;
+  slug: string;
 }
 
 export interface Store {
-    id: string;
-    imageUrl: string;
-    title: string;
-    description: string;
-    cnpj: string;
-    userId: string;
-    isActive: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+  id: string;
+  imageUrl: string;
+  title: string;
+  description: string;
+  cnpj: string;
+  userId: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface ProductComplete {
-    id: string;
-    title: string;
-    slug: string;
-    imageUrl: string;
-    description: string;
-    priceInCents: number;
-    stock: number;
-    category: Category;
-    store: Store;
-    isActive: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+  id: string;
+  title: string;
+  slug: string;
+  imageUrl: string;
+  description: string;
+  priceInCents: number;
+  stock: number;
+  category: Category;
+  store: Store;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 export const useFetchProductByStoreId = (storeId: string, page: number) => {
-    return useQuery<ProductsData>({
-        queryKey: [QUERYKEYS.listProductsByStoreId, storeId, page],
-        queryFn: () => listProductsByStoreId(storeId, page),
-        enabled: !!storeId,
-    });
+  return useQuery<ProductsData>({
+    queryKey: [QUERYKEYS.listProductsByStoreId, storeId, page],
+    queryFn: () => listProductsByStoreId(storeId, page),
+    enabled: !!storeId,
+  });
 };
 
 export const useFetchProductByCategoryId = (categoryId: string, page: number) => {
-    return useQuery<ProductsData>({
-        queryKey: [QUERYKEYS.listProductsByCategoryId],
-        queryFn: () => listProductsByCategoryId(categoryId, page),
-        enabled: !!categoryId,
-    });
+  return useQuery<ProductsData>({
+    queryKey: [QUERYKEYS.listProductsByCategoryId],
+    queryFn: () => listProductsByCategoryId(categoryId, page),
+    enabled: !!categoryId,
+  });
 }
 
 export const useFetchProductById = (id: string) => {
-    return useQuery<ProductComplete>({
-        queryKey: [QUERYKEYS.getProductById, id], // Inclui o ID na chave para evitar conflitos de cache
-        queryFn: () => getProductById(id),
-        enabled: !!id, // Habilita a query apenas se o ID for válido
-    });
+  return useQuery<ProductComplete>({
+    queryKey: [QUERYKEYS.getProductById, id], // Inclui o ID na chave para evitar conflitos de cache
+    queryFn: () => getProductById(id),
+    enabled: !!id, // Habilita a query apenas se o ID for válido
+  });
+};
+
+export const useInfiniteFetchProductByStoreId = (storeId: string) => {
+  return useInfiniteQuery<ProductsData, Error, ProductsData, [string, string], number>({
+    queryKey: [QUERYKEYS.listProductsByStoreId, storeId],
+    queryFn: ({ pageParam = 1 }: QueryFunctionContext<[string, string], number>) =>
+      listProductsByStoreId(storeId, pageParam),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.currentPage < lastPage.totalPages) {
+        return lastPage.currentPage + 1;
+      } else {
+        return undefined;
+      }
+    },
+    initialPageParam: 1,
+    enabled: !!storeId,
+  });
 };
 
 export const useInfiniteFetchProductByCategoryId = (categoryId: string) => {
-    return useInfiniteQuery<ProductsData, Error, ProductsData, [string, string], number>({
-      queryKey: [QUERYKEYS.listProductsByCategoryId, categoryId],
-      queryFn: ({ pageParam = 1 }: QueryFunctionContext<[string, string], number>) =>
-        listProductsByCategoryId(categoryId, pageParam),
-      getNextPageParam: (lastPage) => {
-        if (lastPage.currentPage < lastPage.totalPages) {
-          return lastPage.currentPage + 1;
-        } else {
-          return undefined;
-        }
-      },
-      initialPageParam: 1,
-      enabled: !!categoryId,
-    });
-  };
+  return useInfiniteQuery<ProductsData, Error, ProductsData, [string, string], number>({
+    queryKey: [QUERYKEYS.listProductsByCategoryId, categoryId],
+    queryFn: ({ pageParam = 1 }: QueryFunctionContext<[string, string], number>) =>
+      listProductsByCategoryId(categoryId, pageParam),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.currentPage < lastPage.totalPages) {
+        return lastPage.currentPage + 1;
+      } else {
+        return undefined;
+      }
+    },
+    initialPageParam: 1,
+    enabled: !!categoryId,
+  });
+};
 
 export const useFetchProductByRandomCategory = (page: number, size: number) => {
-    return useQuery<ProductsByRandomCategoryResponse>({
-        queryKey: [QUERYKEYS.listProductsByCategoryId],
-        queryFn: () => ListProductsByRandomCategory(page, size),
-    });
+  return useQuery<ProductsByRandomCategoryResponse>({
+    queryKey: [QUERYKEYS.listProductsByCategoryId],
+    queryFn: () => ListProductsByRandomCategory(page, size),
+  });
 }
