@@ -9,7 +9,7 @@
 - [ ] rodar timer nas missão de tempo;
 
 - [ ] cadastrar cupom na loja;
-- [ ] editar produto do carrinho;
+- [x] editar produto do carrinho;
 - [ ] editar perfil do usuario;
 - [ ] confirmar pedido sendo a loja;
 - [x] carregar mais produtos com a rolagem da tela;
