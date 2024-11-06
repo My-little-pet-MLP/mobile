@@ -16,6 +16,7 @@ import {
 import React from "react";
 import { InfiniteData } from "@tanstack/react-query";
 
+
 export default function ListProductByCategory() {
   const { categoryId } = useLocalSearchParams();
   const categoryIdFetch = Array.isArray(categoryId)
