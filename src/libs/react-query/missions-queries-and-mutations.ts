@@ -3,6 +3,7 @@ import { QUERYKEYS } from "./query-is";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { completeMission } from "@/hooks/missions/complete-mission";
 import { Alert } from "react-native";
+import { findMissionById } from "@/hooks/missions/find-mission-by-id";
 
 export const useListMissions = (customer_id: string) => {
     return useQuery({
@@ -16,7 +17,7 @@ export const useCompleteMission = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (id:string) =>
+        mutationFn: (id: string) =>
             completeMission(id), // Usa a função de registro que criamos anteriormente
         onSuccess: () => {
             // Atualiza o cache ou invalida consultas, conforme necessário
@@ -27,5 +28,13 @@ export const useCompleteMission = () => {
             Alert.alert("Erro ao Completar a missão", "A missão não foi completada!");
             console.error("Erro ao atualizar a missão:", error.message || error);
         },
+    });
+};
+
+export const useFindByIdMission = (id: string) => {
+    return useQuery({
+        queryKey: [QUERYKEYS.findMissionById], // Chave única da query
+        queryFn: () => findMissionById(id), // Função que realiza a requisição
+        enabled: !!id, // Habilita a query apenas se customer_id for válido
     });
 };

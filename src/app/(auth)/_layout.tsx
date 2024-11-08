@@ -119,6 +119,15 @@ export default function LayoutApp() {
           tabBarButton: () => null, // Esconde o botão da aba
         }}
       />
+          <Tabs.Screen
+      
+      name="challangers/mission/[missionid]"
+      options={{
+        title:"Detalhes da Missão",
+        tabBarButton: () => null, // Esconde o botão da aba
+      }}
+    />
     </Tabs>
+    
   );
 }

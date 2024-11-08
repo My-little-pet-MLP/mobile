@@ -15,8 +15,8 @@ interface EditPetModalProps {
 
 export const EditPetModal: React.FC<EditPetModalProps> = ({ pet, visible, onClose }) => {
     const actionSheetRef = useRef(null);
-    const { mutateAsync: deletePet } = useDeletePet();
-    const { mutateAsync: updatePet } = useUpdatePet();
+    const { mutateAsync: deletePet, isPending: isDeleting } = useDeletePet();
+    const { mutateAsync: updatePet, isPending: isUpdating } = useUpdatePet();
 
     const { control, handleSubmit, setValue, formState: { errors } } = useForm<UpdatePetType>({
         resolver: zodResolver(UpdatePetSchema),
@@ -99,17 +99,29 @@ export const EditPetModal: React.FC<EditPetModalProps> = ({ pet, visible, onClos
 
                     {/* Botões de Ação */}
                     <View className="flex-row justify-between mt-4">
-                        <TouchableOpacity onPress={onClose} style={{ backgroundColor: "#FF4C4C", paddingVertical: 10, paddingHorizontal: 15, borderRadius: 8, alignItems: "center" }}>
+                        <TouchableOpacity 
+                            onPress={onClose} 
+                            style={{ backgroundColor: "#FF4C4C", paddingVertical: 10, paddingHorizontal: 15, borderRadius: 8, alignItems: "center" }}
+                            disabled={isDeleting || isUpdating}
+                        >
                             <Text style={{ color: "#fff", fontWeight: "bold" }}>Fechar</Text>
                         </TouchableOpacity>
 
                         <View className="flex-row space-x-2 gap-4">
-                            <TouchableOpacity onPress={handleDelete} style={{ backgroundColor: "#FF4C4C", paddingVertical: 10, paddingHorizontal: 15, borderRadius: 8, alignItems: "center" }}>
-                                <Text style={{ color: "#fff", fontWeight: "bold" }}>Excluir</Text>
+                            <TouchableOpacity 
+                                onPress={handleDelete} 
+                                style={{ backgroundColor: "#FF4C4C", paddingVertical: 10, paddingHorizontal: 15, borderRadius: 8, alignItems: "center" }}
+                                disabled={isDeleting || isUpdating}
+                            >
+                                <Text style={{ color: "#fff", fontWeight: "bold" }}>{isDeleting ? "Excluindo..." : "Excluir"}</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={handleSubmit(onSubmit)} style={{ backgroundColor: "#4CAF50", paddingVertical: 10, paddingHorizontal: 15, borderRadius: 8, alignItems: "center" }}>
-                                <Text style={{ color: "#fff", fontWeight: "bold" }}>Salvar</Text>
+                            <TouchableOpacity 
+                                onPress={handleSubmit(onSubmit)} 
+                                style={{ backgroundColor: "#4CAF50", paddingVertical: 10, paddingHorizontal: 15, borderRadius: 8, alignItems: "center" }}
+                                disabled={isDeleting || isUpdating}
+                            >
+                                <Text style={{ color: "#fff", fontWeight: "bold" }}>{isUpdating ? "Salvando..." : "Salvar"}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
