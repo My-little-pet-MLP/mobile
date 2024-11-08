@@ -112,7 +112,7 @@ export default function MissionScreen() {
                     {missionData?.timer ? (
                         <View className="flex justify-center items-center mb-5 p-5 bg-gray-100 rounded-lg shadow-md">
                             <Text className="text-xl font-bold text-yellow-600 mb-2">⏰</Text>
-                            <View className="w-30 h-30 bg-green-500 rounded-full flex justify-center items-center mb-5">
+                            <View className="w-32 h-24 bg-green-500 rounded-xl flex justify-center items-center mb-5">
                                 <Text className="text-3xl font-bold text-white">{formatTimeLeft()}</Text>
                             </View>
                             {!isTimerRunning && (
@@ -142,9 +142,24 @@ export default function MissionScreen() {
                             </TouchableOpacity>
                         </View>
                     ) : (
-                        <TouchableOpacity onPress={pickImage} style={styles.button}>
-                            <Text className="text-white font-bold text-lg">Selecionar Imagem da Galeria</Text>
-                        </TouchableOpacity>
+                        <>
+                            <TouchableOpacity onPress={pickImage} style={styles.button}>
+                                <Text className="text-white font-bold text-lg">Selecionar Imagem da Galeria</Text>
+                            </TouchableOpacity>
+                            {imageUri && (
+                                <TouchableOpacity
+                                    onPress={handleCompleteMission}
+                                    style={[styles.completeButton, { marginTop: 10 }]}
+                                    disabled={isPendingCompleteMission}
+                                >
+                                    {isPendingCompleteMission ? (
+                                        <ActivityIndicator color="#FFF" />
+                                    ) : (
+                                        <Text className="text-white font-bold text-lg">Completar Missão</Text>
+                                    )}
+                                </TouchableOpacity>
+                            )}
+                        </>
                     )}
 
                     {imageUri && (

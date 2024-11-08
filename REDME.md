@@ -2,10 +2,10 @@
 
 # requisitos prioritarios;
 - [ ] adicionar o cupom a compra;
-- [x] tirar foto na missão;
-- [x] rodar timer nas missão de tempo;
 - [ ] barra de pesquisa por produtos;
 - [ ] editar perfil do usuario;
+- [x] tirar foto na missão;
+- [x] rodar timer nas missão de tempo;
 - [x] excluir o pet;
 - [x] editar produto do carrinho;
 - [x] carregar mais produtos com a rolagem da tela;
