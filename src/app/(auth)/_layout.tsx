@@ -42,11 +42,11 @@ export default function LayoutApp() {
           headerRight: () => (
             <TouchableOpacity onPress={() => navigate.push("/cart")}>
               {/* Ícone de carrinho no header */}
-              <MaterialCommunityIcons 
-                name="cart" 
-                size={32} 
-                color="white" 
-                style={{ marginRight: 24 }} 
+              <MaterialCommunityIcons
+                name="cart"
+                size={32}
+                color="white"
+                style={{ marginRight: 24 }}
               />
             </TouchableOpacity>
           ),
@@ -74,11 +74,11 @@ export default function LayoutApp() {
           headerRight: () => (
             <TouchableOpacity onPress={() => navigate.push("/cart")}>
               {/* Ícone de carrinho no header */}
-              <MaterialCommunityIcons 
-                name="cart" 
-                size={32} 
-                color="white" 
-                style={{ marginRight: 24 }} 
+              <MaterialCommunityIcons
+                name="cart"
+                size={32}
+                color="white"
+                style={{ marginRight: 24 }}
               />
             </TouchableOpacity>
           ),
@@ -112,22 +112,22 @@ export default function LayoutApp() {
       />
 
       <Tabs.Screen
-      
-        name="cart/index"
+
+        name="cart"
         options={{
-          title:"CardShop",
+          title: "CardShop",
           tabBarButton: () => null, // Esconde o botão da aba
         }}
       />
-          <Tabs.Screen
-      
-      name="challangers/mission/[missionid]"
-      options={{
-        title:"Detalhes da Missão",
-        tabBarButton: () => null, // Esconde o botão da aba
-      }}
-    />
+      <Tabs.Screen
+
+        name="challangers/mission/[missionid]"
+        options={{
+          title: "Detalhes da Missão",
+          tabBarButton: () => null, // Esconde o botão da aba
+        }}
+      />
     </Tabs>
-    
+
   );
 }

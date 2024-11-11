@@ -1,7 +1,7 @@
 # requisitos que faltam dia 05/11/2024
 
 # requisitos prioritarios;
-- [ ] adicionar o cupom a compra;
+- [x] adicionar o cupom a compra;
 - [ ] barra de pesquisa por produtos;
 - [x] tirar foto na missão;
 - [x] rodar timer nas missão de tempo;
@@ -17,7 +17,6 @@
 
 # requisitos adicionais;
 - [ ] confirmar pedido recebido pelo cliente;
-- [ ] editar perfil do usuario; (talvez não vai dar para entregar isso)
+- [ ] editar perfil do usuario; (talvez não vai dar para entregar isso);
 - [ ] recomendações de produtos com base na informação dos pets;
-
 - [ ] pesquisa por categoria;

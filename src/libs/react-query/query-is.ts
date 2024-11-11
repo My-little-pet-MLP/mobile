@@ -12,5 +12,6 @@ export enum QUERYKEYS {
     listAllPetsByCustomerId = "listAllPetsByCustomerId",
     listMissions= "listMissions",
     listcuponsbycustomer="listcuponsbycustomer",
-    findMissionById="findMissionById"
+    findMissionById="findMissionById",
+    getOrderById="getOrderById"
 }

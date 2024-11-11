@@ -1,4 +1,3 @@
-import { useListProductInOrderByOrder } from "@/libs/react-query/product-in-orders-queries.and-mutations";
 import { useGetStoreById } from "@/libs/react-query/store-queries-and-mutations";
 import {
   ActivityIndicator,
@@ -7,9 +6,12 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { ProductInCarBox } from "./product-in-car-box";
 import { Order } from "../../../../../@types/orders";
+import { router } from "expo-router";
+import { useListProductInOrderByOrder } from "@/libs/react-query/product-in-orders-queries.and-mutations";
 
 export function StoreInfo({
   storeId,
@@ -20,6 +22,16 @@ export function StoreInfo({
 }) {
   const { data: products, isLoading: isLoadingProducts, error } = useListProductInOrderByOrder(order.id);
   const { data: store, isLoading: isLoadingStore } = useGetStoreById(storeId);
+
+
+
+  function HadlerFinalizeOrderScreen() {
+    router.push(`/(auth)/cart/finalize-order/${order.id}`);
+  }
+
+  function handleFinalizeOrder() {
+      HadlerFinalizeOrderScreen();
+  }
 
   return (
     <View>
@@ -49,13 +61,15 @@ export function StoreInfo({
               />
             ))}
           </ScrollView>
+
           <View className="flex flex-row justify-between items-center mt-12">
             <View className="p-3">
               <Text className="text-white font-bold text-base">
                 Valor Total: R$ {(order.fullPriceOrderInCents / 100).toFixed(2)}
               </Text>
             </View>
-            <TouchableOpacity>
+
+            <TouchableOpacity onPress={handleFinalizeOrder}>
               <View className="bg-green-500 rounded-lg p-3">
                 <Text className="text-white font-bold text-lg">
                   Finalizar pedido

@@ -6,5 +6,6 @@ export interface Order {
     customerId: string;
     created_at: string;
     updated_at: string;
+    cupomId:string;
   }
   
