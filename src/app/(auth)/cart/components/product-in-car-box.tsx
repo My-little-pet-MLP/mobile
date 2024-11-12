@@ -1,14 +1,14 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import { useUpdateProductInOrder } from "@/libs/react-query/product-in-orders-queries.and-mutations";
 import { router } from "expo-router";
 
 interface ProductInCarBoxProps {
   product: {
-    id: string; // O id do produto, também será passado como "id" na atualização
+    id: string;
     image: string;
     name: string;
     quantity: number;
-    price: number; // preço unitário em centavos
+    price: number;
     productInOrderId: string;
   };
 }
@@ -17,13 +17,13 @@ export function ProductInCarBox({
   product,
 }: ProductInCarBoxProps) {
   const { id, image, name, quantity, price, productInOrderId } = product;
-  const priceUnitary = price / quantity; // Total baseado na quantidade
+  const priceUnitary = price / quantity;
 
   const { mutate: updateProductInOrder, isPending: isUpdatingProduct } = useUpdateProductInOrder();
 
   const handleQuantityChange = (newQuantity: number) => {
     updateProductInOrder({
-      id: productInOrderId, // Utiliza productInOrderId para a atualização
+      id: productInOrderId,
       quantity: newQuantity,
     });
   };
@@ -33,27 +33,43 @@ export function ProductInCarBox({
   };
 
   const handleDecreaseQuantity = () => {
-    if (quantity > 1) {
+    if (quantity === 1) {
+      Alert.alert(
+        "Confirmação",
+        "Tem certeza de que deseja remover o produto do pedido?",
+        [
+          {
+            text: "Cancelar",
+            style: "cancel",
+          },
+          {
+            text: "Excluir",
+            onPress: () => handleQuantityChange(0),
+            style: "destructive",
+          },
+        ]
+      );
+    } else {
       handleQuantityChange(quantity - 1);
     }
   };
+
   function NavigationProductId(id: string) {
     router.push(`/shopping/product/${id}`);
-}
+  }
+
   return (
     <View key={id} className="mt-2 flex flex-row gap-2">
-      <TouchableOpacity onPress={()=>NavigationProductId(product.id)}>
-      <Image source={{ uri: image }} className="h-24 w-24 rounded" />
+      <TouchableOpacity onPress={() => NavigationProductId(product.id)}>
+        <Image source={{ uri: image }} className="h-24 w-24 rounded" />
       </TouchableOpacity>
       <View className="flex flex-col text-base">
         <Text className="text-white">{name}</Text>
 
-        {/* Exibe o preço unitário fixo */}
         <Text className="text-white">
           Preço unitário: R$ {(priceUnitary / 100).toFixed(2)}
         </Text>
 
-        {/* Exibe o preço total que muda conforme a quantidade */}
         <Text className="text-white">
           Preço total: R$ {(price / 100).toFixed(2)}
         </Text>
@@ -75,7 +91,6 @@ export function ProductInCarBox({
           </TouchableOpacity>
         </View>
 
-        {/* Exibe um feedback visual de atualização */}
         {isUpdatingProduct && <Text className="text-yellow-500">Atualizando...</Text>}
       </View>
     </View>

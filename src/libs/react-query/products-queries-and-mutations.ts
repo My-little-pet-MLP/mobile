@@ -94,9 +94,9 @@ export const useInfiniteFetchProductByCategoryId = (categoryId: string) => {
   });
 };
 
-export const useFetchProductByRandomCategory = (page: number, size: number) => {
+export const useFetchProductByRandomCategory = (page: number, size: number, randomKey: number) => {
   return useQuery<ProductsByRandomCategoryResponse>({
-    queryKey: [QUERYKEYS.listProductsByCategoryId],
+    queryKey: [QUERYKEYS.listProductsByCategoryId, randomKey], // Inclui randomKey na queryKey
     queryFn: () => ListProductsByRandomCategory(page, size),
   });
 }

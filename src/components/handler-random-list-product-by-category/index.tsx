@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { ProductComponent } from "../product-component";
 import { ProductSkeleton } from "../product-component/skeleton";
 import { useFetchProductByRandomCategory } from "@/libs/react-query/products-queries-and-mutations";
 
 export function HandlerRandomListProductsByCategory() {
-    const { data: products, isLoading, error } = useFetchProductByRandomCategory(1, 8);
+    // Cria uma única chave aleatória para cada montagem do componente
+    const [randomKey, setRandomKey] = useState(Math.random());
 
-    const productList = products?.products ?? []; // Garantir valor padrão como array vazio
+    // Passa a chave aleatória como parte da queryKey para garantir uma nova query por montagem
+    const { data: products, isLoading, error, refetch } = useFetchProductByRandomCategory(1, 8, randomKey);
+
+    const productList = products?.products ?? [];
+
+    // Refetch ao montar o componente
+    useEffect(() => {
+        refetch();
+    }, []); // Executa refetch uma vez ao montar o componente
 
     return (
         <View className="w-full h-auto mt-20">

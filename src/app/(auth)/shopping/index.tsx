@@ -24,6 +24,9 @@ export default function ShoppingScreen() {
                     </PagerView>
 
                     <HandlerRandomListProductsByCategory />
+                    <HandlerRandomListProductsByCategory />
+                    <HandlerRandomListProductsByCategory />
+                  
                 </ScrollView>
             </View>
         </SafeAreaView>
