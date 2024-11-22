@@ -35,9 +35,9 @@ export default function SignIn() {
         }
     }, [])
     return (
-        <View className="flex-1 bg-blue-theme">
+        <View className="flex-1 bg-blue-new">
             <View className="w-full h-2/6 items-center justify-center">
-                <Image source={require("@/assets/LOGO-MY-LITTLE-PET.png")} className="w-72 h-72 rounded-xl" />
+                <Image source={require("../../../assets/images/icon.png")} className="w-72 h-72 rounded-xl" />
             </View>
             <View className="w-full h-4/6 px-6 bg-white bottom-0 rounded-t-md flex flex-col items-center gap-8 py-8">
 

@@ -1,4 +1,4 @@
-import "../../global.css"
+import "../../global.css";
 import { router, Slot } from "expo-router"
 import { useEffect } from "react"
 import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
